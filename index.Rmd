@@ -8,8 +8,8 @@ output:
 ---
 
 This is my JSC370 Final Project website.
-
-```{r}
+## Showcasing plots {.tabset}
+```{r, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
 # code from week 11 lab
 
 library(tidyverse)
@@ -56,3 +56,37 @@ topwords <- sb_nutr |>
 
 
 ```
+
+### Figure 1
+```{r,echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+p2 <- ggplot(sb_nutr, aes(x= Calories, fill = Category))+
+  geom_histogram(alpha= 0.5)+
+  theme_bw()
+ggplotly(p2)
+
+```
+### Figure 2
+```{r,echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+sb_nutr |>
+  unnest_tokens(word, Item, token = "words") |>
+  filter(word %in% topwords$word[1:10]) |>
+  plot_ly(
+    x = ~Calories,
+    y = ~`Carb. (g)`,
+    z = ~`Protein (g)`,
+    color = ~word,
+    type = "scatter3d",
+    mode = "markers",
+    marker = list(size = 5)
+  ) |>
+  layout(
+    title = "3D Scatterplot of Calories, Carbs, and Protein",
+    scene = list(
+      xaxis = list(title = "Calories"),
+      yaxis = list(title = "Carbohydrates (g)"),
+      zaxis = list(title = "Protein (g)")
+    )
+  )
+``` 
+
+{-}
